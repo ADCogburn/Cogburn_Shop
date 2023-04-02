@@ -9,18 +9,18 @@ namespace Cogburn_Shop.Controllers
     [Route("[controller]")]
     public class ItemController : ControllerBase
     {
-        private readonly IItemsRepo repository;
+        private readonly IItemsRepo _repository;
 
         public ItemController(IItemsRepo repository)
         {
-            this.repository = repository;
+            this._repository = repository;
         }
 
         //GET /item
         [HttpGet]
         public IEnumerable<ItemDto> GetItems()
         {
-            var items = repository.GetItems().Select(item => item.AsDto());
+            var items = _repository.GetItems().Select(item => item.AsDto());
             return items;
         }
 
@@ -29,7 +29,7 @@ namespace Cogburn_Shop.Controllers
         [HttpGet("{id}")]
         public ActionResult<ItemDto> GetItem(Guid id)
         {
-            var item = repository.GetItem(id);
+            var item = _repository.GetItem(id);
 
             if (item == null)
             {
@@ -41,7 +41,7 @@ namespace Cogburn_Shop.Controllers
 
         //POST /items
         [HttpPost]
-        public ActionResult<ItemDto> CreateItem(CreateItemDTO itemDto)
+        public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
         {
             Item item = new()
             {
@@ -51,16 +51,16 @@ namespace Cogburn_Shop.Controllers
                 Price = itemDto.Price
             };
 
-            repository.CreateItem(item);
+            _repository.CreateItem(item);
 
             return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
         }
         
         //PUT /item/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateItem(Guid id, UpdateItemDTO itemDto)
+        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
         {
-            var existingItem = repository.GetItem(id);
+            var existingItem = _repository.GetItem(id);
 
             if (existingItem ==null)
             {
@@ -73,7 +73,7 @@ namespace Cogburn_Shop.Controllers
                 Price = itemDto.Price
             };
 
-            repository.UpdateItem(updatedItem);
+            _repository.UpdateItem(updatedItem);
 
             return NoContent();
         }
@@ -82,11 +82,11 @@ namespace Cogburn_Shop.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteItem(Guid id)
         {
-            var existingItem = repository.GetItem(id);
+            var existingItem = _repository.GetItem(id);
 
             if (existingItem == null) { return NotFound(); }
 
-            repository.DeleteItem(id);
+            _repository.DeleteItem(id);
 
             return NoContent();
         }

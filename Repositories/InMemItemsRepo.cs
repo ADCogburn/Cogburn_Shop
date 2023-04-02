@@ -30,8 +30,6 @@ namespace Cogburn_Shop.Repositories
         {
             var index = items.FindIndex(existingItem => existingItem.Id == item.Id);
             items[index] = item;
-
-
         }
 
         public void DeleteItem(Guid id)

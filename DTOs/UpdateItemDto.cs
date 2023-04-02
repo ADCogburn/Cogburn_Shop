@@ -2,7 +2,7 @@
 
 namespace Cogburn_Shop.DTOs
 {
-    public record UpdateItemDTO
+    public record UpdateItemDto
     {
         [Required]
         public string? Name { get; init; }
