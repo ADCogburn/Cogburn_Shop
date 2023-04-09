@@ -20,26 +20,36 @@ namespace Cogburn_Shop.Services
         {
             return await _itemsCollection.Find(new BsonDocument()).ToListAsync();
         }
-        
+
+        /*
+        public async Task<Item> GetAsync(string id)
+        {
+            return await _itemsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
+        */
+
         public async Task CreateAsync(Item items)
         {
             await _itemsCollection.InsertOneAsync(items);
             return;
         }
+
          /*
-            public async Task AddToPlaylistAsync(string name, string description, decimal price)
-            {
-                FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
-                UpdateDefinition<Item> update = Builders<Item>.Update.AddToSet<string>("movieIds", movieId);
-                await _itemsCollection.UpdateOneAsync(filter, update);
-                return;
-            }
-            public async Task DeleteAsync(string id)
-            {
-                FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
-                await _itemsCollection.DeleteOneAsync(filter);
-                return;
-            }
-        }*/
+        public async Task AddToItemsAsync(string id, string description)
+        {
+            FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
+            UpdateDefinition<Item> updateDesc = Builders<Item>.Update.AddToSet<string>("Description", description);
+            await _itemsCollection.UpdateOneAsync(filter, updateDesc);
+            return;
+        }
+        */
+
+        public async Task DeleteAsync(string id)
+        {
+            FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
+            await _itemsCollection.DeleteOneAsync(filter);
+            return;
+        }
+      }
     }
-}
+

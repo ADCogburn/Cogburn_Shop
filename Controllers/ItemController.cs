@@ -31,78 +31,29 @@ namespace Cogburn_Shop.Controllers
             await _repository.CreateAsync(item);
             return CreatedAtAction(nameof(GetItems), new { item = item.Id }, item);
         }
-
+        
         /*
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AddToPlaylist(string id, [FromBody] string movieId) { }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id) { }
-        
         // GET /items/{id}
-        [HttpGet("{id}")]
-        public ActionResult<ItemDto> GetItem(Guid id)
+        [HttpGet("{id:length(24)}")]
+        public async Task<ActionResult<Item>> GetOneItem(string id)
         {
-            var item = _repository.GetItem(id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return item.AsDto();
+            return await _repository.GetAsync(id);
         }
         
-        //POST /items
-        [HttpPost]
-        public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
-        {
-            Item item = new()
-            {
-                Id = Guid.NewGuid(),
-                Name = itemDto.Name,
-                Description = itemDto.Description,
-                Price = itemDto.Price
-            };
-
-            _repository.CreateItem(item);
-
-            return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
-        }
-        
-        //PUT /item/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
+        public async Task<IActionResult> AddToItems(string name, [FromBody] string description)
         {
-            var existingItem = _repository.GetItem(id);
-
-            if (existingItem ==null)
-            {
-                return NotFound();
-            }
-
-            Item updatedItem = existingItem with
-            {
-                Name = itemDto.Name,
-                Price = itemDto.Price
-            };
-
-            _repository.UpdateItem(updatedItem);
-
+            await _repository.AddToItemsAsync(name, description);
             return NoContent();
         }
+        */
 
         //DELETE /item/{id}
         [HttpDelete("{id}")]
-        public ActionResult DeleteItem(Guid id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
-            var existingItem = _repository.GetItem(id);
-
-            if (existingItem == null) { return NotFound(); }
-
-            _repository.DeleteItem(id);
-
+            await _repository.DeleteAsync(id);
             return NoContent();
-        }*/
+        }
     }
 }
