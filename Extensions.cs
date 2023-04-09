@@ -1,4 +1,4 @@
-﻿using Cogburn_Shop.DTOs;
+﻿/*using Cogburn_Shop.DTOs;
 using Cogburn_Shop.Entities;
 
 namespace Cogburn_Shop
@@ -17,3 +17,4 @@ namespace Cogburn_Shop
         }
     }
 }
+*/

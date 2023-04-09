@@ -1,30 +1,44 @@
 ﻿using Cogburn_Shop.Entities;
-using Cogburn_Shop.Repositories;
-using Cogburn_Shop.DTOs;
+using Cogburn_Shop.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using MongoDB.Bson;
+using Microsoft.Extensions.Options;
 
 namespace Cogburn_Shop.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ItemController : ControllerBase
     {
-        private readonly IItemsRepo _repository;
+        private readonly MongoDBService _repository;
 
-        public ItemController(IItemsRepo repository)
+        public ItemController(MongoDBService mongoDBService)
         {
-            this._repository = repository;
+            _repository = mongoDBService;
         }
-
+        
         //GET /item
         [HttpGet]
-        public IEnumerable<ItemDto> GetItems()
+        public async Task<List<Item>> GetItems()
         {
-            var items = _repository.GetItems().Select(item => item.AsDto());
-            return items;
+            return await _repository.GetAsync();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Item item) 
+        {
+            await _repository.CreateAsync(item);
+            return CreatedAtAction(nameof(GetItems), new { item = item.Id }, item);
         }
 
+        /*
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AddToPlaylist(string id, [FromBody] string movieId) { }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id) { }
+        
         // GET /items/{id}
         [HttpGet("{id}")]
         public ActionResult<ItemDto> GetItem(Guid id)
@@ -38,7 +52,7 @@ namespace Cogburn_Shop.Controllers
 
             return item.AsDto();
         }
-
+        
         //POST /items
         [HttpPost]
         public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
@@ -89,6 +103,6 @@ namespace Cogburn_Shop.Controllers
             _repository.DeleteItem(id);
 
             return NoContent();
-        }
+        }*/
     }
 }
