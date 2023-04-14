@@ -24,29 +24,36 @@ namespace Cogburn_Shop.Controllers
         {
             return await _repository.GetAsync();
         }
+                
+        // GET /items/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Item>> Get(string id)
+        {
+            var item = await _repository.GetAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return item;
+        }
         
+        //POST /item
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Item item) 
+        public async Task<IActionResult> Post([FromBody] Item item)
         {
             await _repository.CreateAsync(item);
             return CreatedAtAction(nameof(GetItems), new { item = item.Id }, item);
         }
-        
-        /*
-        // GET /items/{id}
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Item>> GetOneItem(string id)
-        {
-            return await _repository.GetAsync(id);
-        }
-        
+
+        //PUT /item/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> AddToItems(string name, [FromBody] string description)
+        public async Task<IActionResult> UpdateAsync(string id, [FromBody] Item updatedItem)
         {
-            await _repository.AddToItemsAsync(name, description);
+            await _repository.UpdateAsync(id, updatedItem);
             return NoContent();
         }
-        */
 
         //DELETE /item/{id}
         [HttpDelete("{id}")]

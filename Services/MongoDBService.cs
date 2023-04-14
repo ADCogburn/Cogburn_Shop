@@ -18,31 +18,26 @@ namespace Cogburn_Shop.Services
         
         public async Task<List<Item>> GetAsync()
         {
-            return await _itemsCollection.Find(new BsonDocument()).ToListAsync();
+            return await _itemsCollection.Find(_ => true).ToListAsync();
         }
 
-        /*
-        public async Task<Item> GetAsync(string id)
+        public async Task<Item?> GetAsync(string id)
         {
-            return await _itemsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+             return await _itemsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
-        */
+ 
 
         public async Task CreateAsync(Item items)
         {
             await _itemsCollection.InsertOneAsync(items);
             return;
         }
-
-         /*
-        public async Task AddToItemsAsync(string id, string description)
+        
+        public async Task UpdateAsync(string id, Item updatedItem)
         {
-            FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
-            UpdateDefinition<Item> updateDesc = Builders<Item>.Update.AddToSet<string>("Description", description);
-            await _itemsCollection.UpdateOneAsync(filter, updateDesc);
+            await _itemsCollection.ReplaceOneAsync(x => x.Id == id, updatedItem);
             return;
         }
-        */
 
         public async Task DeleteAsync(string id)
         {
