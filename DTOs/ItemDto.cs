@@ -1,5 +1,4 @@
-﻿/*
-namespace Cogburn_Shop.DTOs
+﻿namespace Cogburn_Shop.DTOs
 {
     public record ItemDto
     {
@@ -10,4 +9,3 @@ namespace Cogburn_Shop.DTOs
 
     }
 }
-*/

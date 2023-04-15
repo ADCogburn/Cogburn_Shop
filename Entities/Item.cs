@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
+using System.ComponentModel;
 
 namespace Cogburn_Shop.Entities
 {
@@ -9,7 +10,8 @@ namespace Cogburn_Shop.Entities
     public record Item
     {
         [BsonId]
-        public string? Id { get; init; }
+        [DefaultValue("00000000-0000-0000-0000-000000000000")]
+        public Guid Id { get; init; }
 
         [BsonElement("Name")]
         public string? Name { get; init; }

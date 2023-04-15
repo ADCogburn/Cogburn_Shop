@@ -1,7 +1,9 @@
 ﻿using Cogburn_Shop.Entities;
+using Cogburn_Shop.DTOs;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cogburn_Shop.Services
 {
@@ -18,10 +20,11 @@ namespace Cogburn_Shop.Services
         
         public async Task<List<Item>> GetAsync()
         {
-            return await _itemsCollection.Find(_ => true).ToListAsync();
+            var items = await _itemsCollection.Find(_ => true).ToListAsync();
+            return items;
         }
 
-        public async Task<Item?> GetAsync(string id)
+        public async Task<Item?> GetAsync(Guid id)
         {
              return await _itemsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
@@ -30,20 +33,16 @@ namespace Cogburn_Shop.Services
         public async Task CreateAsync(Item items)
         {
             await _itemsCollection.InsertOneAsync(items);
-            return;
         }
         
-        public async Task UpdateAsync(string id, Item updatedItem)
+        public async Task UpdateAsync(Guid id, Item updatedItem)
         {
             await _itemsCollection.ReplaceOneAsync(x => x.Id == id, updatedItem);
-            return;
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(Guid id)
         {
-            FilterDefinition<Item> filter = Builders<Item>.Filter.Eq("Id", id);
-            await _itemsCollection.DeleteOneAsync(filter);
-            return;
+            await _itemsCollection.DeleteOneAsync(x => x.Id == id);
         }
       }
     }
