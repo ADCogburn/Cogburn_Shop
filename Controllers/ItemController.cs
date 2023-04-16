@@ -2,10 +2,7 @@
 using Cogburn_Shop.Services;
 using Cogburn_Shop.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using Microsoft.Extensions.Options;
-using ZstdSharp.Unsafe;
+
 
 namespace Cogburn_Shop.Controllers
 {
@@ -22,41 +19,42 @@ namespace Cogburn_Shop.Controllers
         
         //GET /item
         [HttpGet]
-        public async Task<List<Item>> GetItems()
+        public async Task<IEnumerable<ItemDto>> GetItemsAsync()
         {
-            return await _repository.GetAsync(); 
+            var items = (await _repository.GetItemsAsync()).Select(item => item.AsDto());
+            return items;
         }
           
         
         // GET /items/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> Get(Guid id)
+        public async Task<ActionResult<ItemDto>> GetItemAsync(Guid id)
         {
-            var item = await _repository.GetAsync(id);
+            var item = await _repository.GetItemAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
 
-            return item;
+            return item.AsDto();
         }
         
 
         //POST /item
         [HttpPost]
-        public async Task<IActionResult> Post(Item item)
+        public async Task<ActionResult<ItemDto>> CreateItemAsync(CreateItemDto itemDto)
         {
-            item = new()
+            Item item = new()
             {
                 Id = Guid.NewGuid(),
-                Name = item.Name,
-                Price = item.Price,
-                Description = item.Description
+                Name = itemDto.Name,
+                Price = itemDto.Price,
+                Description = itemDto.Description
             };
             
-            await _repository.CreateAsync(item);
-            return CreatedAtAction(nameof(GetItems), new { id = item.Id }, item);
+            await _repository.CreateItemAsync(item);
+            return CreatedAtAction(nameof(GetItemAsync), new { id = item.Id }, item.AsDto());
         }
 
 
