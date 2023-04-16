@@ -60,14 +60,21 @@ namespace Cogburn_Shop.Controllers
 
         //PUT /item/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Item updatedItem)
+        public async Task<IActionResult> UpdateAsync(Guid id, UpdateItemDto itemDto)
         {
-            var item = await _repository.GetAsync(id);
+            var item = await _repository.GetItemAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
+
+            Item updatedItem = item with
+            {
+                Name = itemDto.Name,
+                Price = itemDto.Price,
+                Description = itemDto.Description
+            };
 
             await _repository.UpdateAsync(id, updatedItem);
 
@@ -79,7 +86,7 @@ namespace Cogburn_Shop.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var item = await _repository.GetAsync(id);
+            var item = await _repository.GetItemAsync(id);
 
             if (item == null)
             {
