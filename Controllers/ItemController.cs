@@ -1,35 +1,36 @@
 ﻿using Cogburn_Shop.Entities;
-using Cogburn_Shop.Repositories;
+using Cogburn_Shop.Services;
 using Cogburn_Shop.DTOs;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace Cogburn_Shop.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ItemController : ControllerBase
     {
-        private readonly IItemsRepo _repository;
+        private readonly MongoDBService _repository;
 
-        public ItemController(IItemsRepo repository)
+        public ItemController(MongoDBService mongoDBService)
         {
-            this._repository = repository;
+            _repository = mongoDBService;
         }
-
+        
         //GET /item
         [HttpGet]
-        public IEnumerable<ItemDto> GetItems()
+        public async Task<IEnumerable<ItemDto>> GetItemsAsync()
         {
-            var items = _repository.GetItems().Select(item => item.AsDto());
+            var items = (await _repository.GetItemsAsync()).Select(item => item.AsDto());
             return items;
         }
-          
-        
-        // GET /item/{id}
+
+
+        // GET /items/{id}
         [HttpGet("{id}")]
-        public ActionResult<ItemDto> GetItem(Guid id)
+        public async Task<ActionResult<ItemDto>> GetItemAsync(Guid id)
         {
-            var item = _repository.GetItem(id);
+            var item = await _repository.GetItemAsync(id);
 
             if (item == null)
             {
@@ -38,55 +39,61 @@ namespace Cogburn_Shop.Controllers
 
             return item.AsDto();
         }
+        
 
-        //POST /items
+        //POST /item
         [HttpPost]
-        public ActionResult<ItemDto> CreateItem(CreateItemDto itemDto)
+        public async Task<ActionResult<ItemDto>> CreateItemAsync(CreateItemDto itemDto)
         {
             Item item = new()
             {
                 Id = Guid.NewGuid(),
                 Name = itemDto.Name,
-                Description = itemDto.Description,
-                Price = itemDto.Price
+                Price = itemDto.Price,
+                Description = itemDto.Description
             };
-
-            _repository.CreateItem(item);
-
-            return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
+            
+            await _repository.CreateItemAsync(item);
+            return CreatedAtAction(nameof(GetItemAsync), new { id = item.Id }, item.AsDto());
         }
-        
+
+
         //PUT /item/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
+        public async Task<IActionResult> UpdateAsync(Guid id, UpdateItemDto itemDto)
         {
-            var existingItem = _repository.GetItem(id);
+            var item = await _repository.GetItemAsync(id);
 
-            if (existingItem ==null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            Item updatedItem = existingItem with
+            Item updatedItem = item with
             {
                 Name = itemDto.Name,
-                Price = itemDto.Price
+                Price = itemDto.Price,
+                Description = itemDto.Description
             };
 
-            _repository.UpdateItem(updatedItem);
+            await _repository.UpdateAsync(id, updatedItem);
 
             return NoContent();
         }
 
+
         //DELETE /item/{id}
         [HttpDelete("{id}")]
-        public ActionResult DeleteItem(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var existingItem = _repository.GetItem(id);
+            var item = await _repository.GetItemAsync(id);
 
-            if (existingItem == null) { return NotFound(); }
+            if (item == null)
+            {
+                return NotFound();
+            }
 
-            _repository.DeleteItem(id);
+            await _repository.DeleteAsync(id);
 
             return NoContent();
         }

@@ -1,12 +1,11 @@
-﻿
-namespace Cogburn_Shop.DTOs
+﻿namespace Cogburn_Shop.DTOs
 {
     public record ItemDto
     {
-        public Guid Id { get; init; }
-        public string? Name { get; init; }
-        public string? Description { get; init; }
-        public decimal Price { get; init; }
+        public Guid Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public decimal Price { get; set; }
 
     }
 }
