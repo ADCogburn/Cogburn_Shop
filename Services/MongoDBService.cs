@@ -1,8 +1,7 @@
 ﻿using Cogburn_Shop.Entities;
-using Cogburn_Shop.DTOs;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Linq;
+
 
 namespace Cogburn_Shop.Services
 {
@@ -34,9 +33,9 @@ namespace Cogburn_Shop.Services
             await _itemsCollection.InsertOneAsync(item);
         }
         
-        public async Task UpdateAsync(Guid id, ItemDto updatedItem)
+        public async Task UpdateAsync(Guid id, Item updatedItem)
         {
-            await _itemsCollection.ReplaceOneAsync(x => x.Id == id, updatedItem);
+            await _itemsCollection.ReplaceOneAsync(item => item.Id == id, updatedItem);
         }
 
         public async Task DeleteAsync(Guid id)
