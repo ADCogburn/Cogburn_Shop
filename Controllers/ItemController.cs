@@ -23,9 +23,9 @@ namespace Cogburn_Shop.Controllers
             var items = _repository.GetItems().Select(item => item.AsDto());
             return items;
         }
-
-
-        // GET /items/{id}
+          
+        
+        // GET /item/{id}
         [HttpGet("{id}")]
         public ActionResult<ItemDto> GetItem(Guid id)
         {
