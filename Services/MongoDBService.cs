@@ -1,9 +1,8 @@
 ﻿using Cogburn_Shop.Entities;
 using Cogburn_Shop.DTOs;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Cogburn_Shop.Services
 {
@@ -18,24 +17,24 @@ namespace Cogburn_Shop.Services
             _itemsCollection = database.GetCollection<Item>(mongoDBSettings.Value.CollectionName);
         }
         
-        public async Task<List<Item>> GetAsync()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
             var items = await _itemsCollection.Find(_ => true).ToListAsync();
             return items;
         }
 
-        public async Task<Item?> GetAsync(Guid id)
+        public async Task<Item> GetItemAsync(Guid id)
         {
-             return await _itemsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            return await _itemsCollection.Find(item => item.Id == id).FirstOrDefaultAsync();
         }
  
 
-        public async Task CreateAsync(Item items)
+        public async Task CreateItemAsync(Item item)
         {
-            await _itemsCollection.InsertOneAsync(items);
+            await _itemsCollection.InsertOneAsync(item);
         }
         
-        public async Task UpdateAsync(Guid id, Item updatedItem)
+        public async Task UpdateAsync(Guid id, ItemDto updatedItem)
         {
             await _itemsCollection.ReplaceOneAsync(x => x.Id == id, updatedItem);
         }

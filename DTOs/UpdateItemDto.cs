@@ -1,4 +1,4 @@
-﻿/*using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Cogburn_Shop.DTOs
 {
@@ -12,4 +12,4 @@ namespace Cogburn_Shop.DTOs
         [Range(1, 1000)]
         public decimal Price { get; init; }
     }
-}*/
+}
