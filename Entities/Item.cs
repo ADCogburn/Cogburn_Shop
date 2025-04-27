@@ -1,26 +1,24 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.ComponentModel;
 
 namespace Cogburn_Shop.Entities
 {
-    [BsonIgnoreExtraElements]
-    public record Item
+    [Table("Items")]
+    public class Item
     {
-        [BsonId]
-        [DefaultValue("00000000-0000-0000-0000-000000000000")]
-        public Guid Id { get; init; }
+        [Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        [BsonElement("Name")]
-        public string? Name { get; init; }
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; } = string.Empty;
 
-        [BsonElement("description")]
         [JsonPropertyName("description")]
-        public string? Description { get; init; }
+        [MaxLength(500)]
+        public string? Description { get; set; }
 
-        public decimal Price { get; init; }
- 
+        [Column(TypeName = "decimal(10,2)")]
+        public decimal Price { get; set; }
     }
 }
