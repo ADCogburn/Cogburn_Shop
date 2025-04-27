@@ -4,11 +4,11 @@ This project is testing using **Podman** for the Microsoft SQL database.
 
 Why use containers?
 
-> **Quicker DB Resets** - Simply blow the volume away ("purge") and the container will simply make a new one from scratch. This is agnostic to machine, environment, etc.
-> **Quicker Onboarding** - New users simply need to install (via a few command lines) Podman and Podman-compose, and then can have their Database running without installing many different software.
-> **Consistency** - The ports for appsettings can be set for all devs to the same, which then connect to the same ports in the container. These shouldn't ever go out of sync without manual changes.
-> **Automatable** - Because containers are environment agnostic (and ephemeral), these can run on Dev, QA, or even CI/CD pipelines. This allows CI/CD to have it's own temporary DB, run migrations as need, do all UI/API tests, merge if it all passes, then remove this DB. This is all automated and requires no manual setup/teardown.
-> **Free** - Podman is a free alternative to Docker. Docker is free for small business (under 250 employees), but charges government agencies regardless of cost. Podman is a free open source alternative.
+- **Quicker DB Resets** - Simply blow the volume away ("purge") and the container will simply make a new one from scratch. This is agnostic to machine, environment, etc.
+- **Quicker Onboarding** - New users simply need to install (via a few command lines) Podman and Podman-compose, and then can have their Database running without installing many different software.
+- **Consistency** - The ports for appsettings can be set for all devs to the same, which then connect to the same ports in the container. These shouldn't ever go out of sync without manual changes.
+- **Automatable** - Because containers are environment agnostic (and ephemeral), these can run on Dev, QA, or even CI/CD pipelines. This allows CI/CD to have it's own temporary DB, run migrations as need, do all UI/API tests, merge if it all passes, then remove this DB. This is all automated and requires no manual setup/teardown.
+- **Free** - Podman is a free alternative to Docker. Docker is free for small business (under 250 employees), but charges government agencies regardless of cost. Podman is a free open source alternative.
 
 ---
 
